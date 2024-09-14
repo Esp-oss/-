@@ -1,44 +1,45 @@
+
+由于接水区域是由当前位置左右两部分的最大值决定的,所以要找到i位置两侧的最大值，再取最小的那个与当前高度相减即可得到当前位置可以接的雨水数量（若为负数则接的雨水为0）.
+
 代码：
 class Solution {
 public:
     int trap(vector<int>& height) {
         vector<vector<int>> cnt;
-        int ans=0;
-        for(int i=1;i<height.size()-1;i++){
-            int left=i-1;
-            int right=i+1;
-            int max_left=height[left];
-            int cnt_left=left;
-            int max_right=height[right];
-            int cnt_right=right;
-            //找到i左右最大值
-            while(left>=0){
-                if(height[left]-height[cnt_left]>0){
-                max_left=height[left];
-                cnt_left=left;
-                }
-                else{
+        int ans = 0;
+        for (int i = 1; i < height.size() - 1; i++) {
+            int left = i - 1;
+            int right = i + 1;
+            int max_left = height[left];
+            int cnt_left = left;
+            int max_right = height[right];
+            int cnt_right = right;
+            // 找到i左右最大值
+            while (left >= 0) {
+                if (height[left] - height[cnt_left] > 0) {
+                    max_left = height[left];
+                    cnt_left = left;
+                } else {
                     left--;
                 }
             }
-            while(right<height.size()){
-                if(height[right]-height[cnt_right]>0){
-                max_right=height[right];
-                cnt_right=right;
-                }
-                else{
+            while (right < height.size()) {
+                if (height[right] - height[cnt_right] > 0) {
+                    max_right = height[right];
+                    cnt_right = right;
+                } else {
                     right++;
                 }
             }
-            cnt.push_back({height[cnt_left],height[cnt_right],height[i]});
+            cnt.push_back({height[cnt_left], height[cnt_right], height[i]});
         }
 
-        for(int i=0;i<cnt.size();i++){
-            int V = min(cnt[i][0],cnt[i][1])-cnt[i][2];
-            if(V>=0)
-            ans += V;
+        for (int i = 0; i < cnt.size(); i++) {
+            int V = min(cnt[i][0], cnt[i][1]) - cnt[i][2];
+            if (V >= 0)
+                ans += V;
         }
-       
+
         return ans;
     }
 };
