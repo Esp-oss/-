@@ -8,8 +8,10 @@ public:
         vector<vector<int>> cnt;
         int ans = 0;
         for (int i = 1; i < height.size() - 1; i++) {
+            
             int left = i - 1;
             int right = i + 1;
+            //left，right向左右遍历
             int max_left = height[left];
             int cnt_left = left;
             int max_right = height[right];
@@ -41,5 +43,37 @@ public:
         }
 
         return ans;
+    }
+};
+时间复杂度为O（n^2）,每次都重复遍历数组一次以找到i左右两侧的最大值
+空间复杂度为O（n）储存i位置左右两侧的最大值
+
+优化一下：
+新建数组pre_max和suf_max，以储存前缀最大值和后缀最大值
+i位置处的前缀最大值，为前缀最大值和当前位置高度，的最大值，即max(pre_max[i-1],height[i])
+i位置处的前缀最大值，为后缀最大值和当前位置高度，的最大值，即max(suf_max[i+1],height[i])
+每次只遍历数组一次时间为O(n)
+
+代码：
+class Solution {
+public:
+    int trap(vector<int>& height) {
+    int length=height.size();
+    vector<int> pre_max(length,0);
+    vector<int> suf_max(length,0);
+    pre_max[0]=height[0];
+    suf_max[length-1]=height[length-1];
+    int ans=0;
+
+    for(int i=1;i<length;i++){
+        pre_max[i]=max(pre_max[i-1],height[i]);
+    }
+     for(int i=length-2;i>=0;i--){
+        suf_max[i]=max(suf_max[i+1],height[i]);
+    }
+    for(int i=0;i<length-1;i++){
+        ans += min(pre_max[i],suf_max[i])-height[i];
+    }
+    return ans;
     }
 };
