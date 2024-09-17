@@ -26,3 +26,36 @@
 
 0 <= s.length <= 5 * 104
 s 由英文字母、数字、符号和空格组成
+
+思路:关于找到子串问题都可以用滑动窗口，定义两个变量left，right。如下:
+
+//外层循环扩展右边界，内层循环扩展左边界
+for (int l = 0, r = 0 ; r < n ; r++) {
+	//当前考虑的元素
+	while (l <= r && check()) {//区间[left,right]不符合题意
+        //扩展左边界
+    }
+    //区间[left,right]符合题意，统计相关信息
+}
+本题需要用到哈希表来储存遍历过的字符。右边界扩展得到字符c，如果重复则，删除重复元素直至表中无重复元素，扩展左边界。没有与c重复的元素，则将字符c插入哈希表中
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int left=0;
+        int ans=0;
+        int len=s.size();
+        unordered_set<char> hash;
+
+        for(int right=0;right<len;right++){
+            char c=s[right];
+            while(hash.count(c)){//直到表内无重复元素才退出
+                hash.erase(s[left]);
+                left++;
+            }
+            hash.insert(c);//没有字符c以后再加入字符c
+            ans=max(right-left+1,ans);
+        }
+        return ans;
+    }
+};
